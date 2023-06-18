@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base{
+  :root {
+    --primary: #030319;
+    --secondary: #09093b;
+    --white: #dbdaef;
+  }
+}
+
+body {
+  @apply min-h-screen overflow-x-hidden transition-all duration-300 bg-gradient-radial from-[--primary] to-blue-950 text-[--white] grid place-content-center
+}
+
+h1{
+ @apply text-3xl text-white
+}
+
+p{
+  @apply text-lg
+}
