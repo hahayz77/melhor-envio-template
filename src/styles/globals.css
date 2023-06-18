@@ -22,3 +22,15 @@ h1{
 p{
   @apply text-lg
 }
+
+.input{
+  @apply block w-full bg-[--secondary] outline-none focus:outline-cyan-900 focus:outline-dotted focus:outline-2 px-3 py-1 my-3 rounded-lg
+}
+
+.btn{
+  @apply block w-full bg-[--secondary] outline-double outline-cyan-900 px-3 py-1 rounded-lg my-3 hover:outline-cyan-600 hover:scale-105 transition-all duration-300 focus:bg-green-700
+}
+
+.btn_error{
+  @apply outline-red-900 text-red-300 hover:outline-none bg-red-500/50 focus:bg-red-500/50
+}
