@@ -34,3 +34,15 @@ p{
 .btn_error{
   @apply outline-red-900 text-red-300 hover:outline-none bg-red-500/50 focus:bg-red-500/50
 }
+
+.show_loading{
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 400ms, visibility 400ms;
+}
+
+.hide_loading{
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 400ms, visibility 400ms;
+}

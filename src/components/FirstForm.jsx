@@ -1,3 +1,4 @@
+import { useStateContext } from '@/context/StateContext';
 import CalculateShipping from '@/functions/CalculateShipping';
 import { Alert, AlertDescription, AlertIcon, AlertTitle } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
@@ -5,19 +6,24 @@ import InputMask from 'react-input-mask';
 
 export default function FirstForm() {
 
+    const { setLoading } = useStateContext();
     const { register, handleSubmit, formState: { errors } } = useForm()
     // console.log(errors)
 
     const onSubmit = async data => {
 
+        setLoading(true);
         if (data.zip_code.length < 9) return console.log("error")
 
         const response = await CalculateShipping(data.zip_code);
-        if (response.error) return console.log(response.error) 
-        else{
+        if (response.error) {
+            setLoading(false);
+            return console.log(response.error);
+        }
+        else {
             console.log(response.data);
         }
-        
+        setLoading(false);
     }
 
     return (
