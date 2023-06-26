@@ -11,8 +11,8 @@ export default function Home() {
 
     return (
         <main>
-            <h1>Hello World!</h1>
-            <p>{isAlive}</p>
+            <h1>MelhorEnvio API Template</h1>
+            <p>Enter your zip code below</p>
             <FirstForm />
         </main>
     )

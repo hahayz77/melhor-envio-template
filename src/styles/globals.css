@@ -16,7 +16,7 @@ body {
 }
 
 h1{
- @apply text-3xl text-white
+ @apply text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-radial from-blue-100 via-blue-200 to-blue-300   
 }
 
 p{
