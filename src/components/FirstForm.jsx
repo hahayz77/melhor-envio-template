@@ -1,6 +1,7 @@
 import { useStateContext } from '@/context/StateContext';
 import CalculateShipping from '@/functions/CalculateShipping';
-import { Alert, AlertDescription, AlertIcon, AlertTitle } from '@chakra-ui/react';
+import { Alert, AlertIcon, AlertTitle, Select } from '@chakra-ui/react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import InputMask from 'react-input-mask';
 
@@ -8,20 +9,31 @@ export default function FirstForm() {
 
     const { setLoading } = useStateContext();
     const { register, handleSubmit, formState: { errors } } = useForm()
+    const [outsideError, setOutsideError] = useState("");
+    const [response, setResponse] = useState(null);
     // console.log(errors)
 
     const onSubmit = async data => {
 
         setLoading(true);
-        if (data.zip_code.length < 9) return console.log("error")
+        setResponse(null);
+        setOutsideError(null);
+
+        if (data.zip_code.length < 9) {
+            setLoading(false);
+            return console.log("error")
+        }
 
         const response = await CalculateShipping(data.zip_code);
         if (response.error) {
             setLoading(false);
-            return console.log(response.error);
+            setOutsideError(response.error);
         }
-        else {
-            console.log(response.data);
+
+        else { //if it's all good
+            setResponse(response.data);
+            console.log(response.data)
+            setOutsideError(null)
         }
         setLoading(false);
     }
@@ -32,7 +44,7 @@ export default function FirstForm() {
                 required: { value: true, message: "Zip code is Required!" },
                 minLength: { value: 9, message: "Wrong zip code" }
             })} />
-            <input className={`btn ${errors?.zip_code?.message ? "btn_error" : ""} `} type="submit" />
+            <input className={`btn ${errors?.zip_code?.message ? "btn_error" : ""} `} type="submit" value='Calculate Shipment' />
             {errors.zip_code &&
                 <div className='h-fit my-3 absolute left-0 -bottom-12 w-full'>
                     <Alert status='error'>
@@ -40,6 +52,17 @@ export default function FirstForm() {
                         <AlertTitle>{errors?.zip_code?.message}</AlertTitle>
                     </Alert>
                 </div>}
+            {outsideError && <>
+                <p className='text-center'>{outsideError}</p>
+            </>}
+            {response &&
+                <Select className='select' placeholder='Select option'>
+                    {response.map((e, index) => (
+                        <option value='option1'>{` R$ ${e.price} - ${e.delivery_time} days to delivery - ${e.name}`}</option>
+                    ))}
+                </Select>
+
+            }
         </form>
     );
 }
