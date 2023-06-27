@@ -48,5 +48,5 @@ p{
 }
 
 .select{
-  @apply bg-indigo-950 text-white outline-none rounded-lg block w-full px-3 py-2
+  @apply bg-indigo-950 text-white outline-none rounded-lg block w-full px-4 py-2
 }
