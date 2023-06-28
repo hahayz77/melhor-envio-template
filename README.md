@@ -1,5 +1,7 @@
 # melhor-envio-template
 
+![Alt text](public/image.png)
+
 ## 🔥 Features
 
 - Real Cep (Zip code | Postal) code Validation with API <a href="viacep.com.br">ViaCep</a>;
