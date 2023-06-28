@@ -11,6 +11,7 @@ export default function FirstForm() {
     const { register, handleSubmit, formState: { errors } } = useForm()
     const [outsideError, setOutsideError] = useState("");
     const [response, setResponse] = useState(null);
+    const [selectValue, setSelectValue] = useState(null);
     // console.log(errors)
 
     const onSubmit = async data => {
@@ -32,10 +33,15 @@ export default function FirstForm() {
 
         else { //if it's all good
             setResponse(response.data);
-            console.log(response.data)
+            console.log(response.data);
+            console.log(response.cepValidation);
             setOutsideError(null)
         }
         setLoading(false);
+    }
+
+    const selectHandler = (e) => {
+        if(e.target.value) console.log(JSON.parse(e.target.value))
     }
 
     return (
@@ -44,7 +50,7 @@ export default function FirstForm() {
                 required: { value: true, message: "Zip code is Required!" },
                 minLength: { value: 9, message: "Wrong zip code" }
             })} />
-            <input className={`btn ${errors?.zip_code?.message ? "btn_error" : ""} `} type="submit" value='Calculate Shipment' />
+            <input className={`btn ${errors?.zip_code?.message ? "btn_error" : ""} `} type="submit" value={`Calculate Shipment`} />
             {errors.zip_code &&
                 <div className='h-fit my-3 absolute left-0 -bottom-12 w-full'>
                     <Alert status='error'>
@@ -56,12 +62,11 @@ export default function FirstForm() {
                 <p className='text-center'>{outsideError}</p>
             </>}
             {response &&
-                <Select className='select' placeholder='Select option'>
+                <Select className='select' placeholder='Select option' onChange={selectHandler}>
                     {response.map((e, index) => (
-                        <option value='option1'>{` R$ ${e.price} - ${e.delivery_time} days to delivery - ${e.name}`}</option>
+                        <option key={index} value={JSON.stringify(e)}>{` R$ ${e.price.replace(".", ",")} - ${e.delivery_time} days to delivery - ${e.name}`}</option>
                     ))}
                 </Select>
-
             }
         </form>
     );

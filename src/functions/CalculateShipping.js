@@ -1,5 +1,13 @@
+import CepValidation from "./CepValidation";
+
 const CalculateShipping = async (postalCode) => {
     try {
+        // -------- CEP|POSTALCODE|ZIPCODE VALIDATION
+        const cepValidation = await CepValidation(postalCode);
+        if (cepValidation.erro) throw new Error("Zipcode not found...")
+
+        // -------- MELHOR ENVIO FETCH 
+        const fromPostalCode = "54270-070"; // -------- MELHOR FROM POSTAL CALCULATION
         const apiUrl = 'https://sandbox.melhorenvio.com.br/api/v2/me/shipment/calculate';
 
         const response = await fetch(apiUrl, {
@@ -13,7 +21,7 @@ const CalculateShipping = async (postalCode) => {
             body: JSON.stringify(
                 {
                     from: {
-                        postal_code: "01002001"
+                        postal_code: fromPostalCode
                     },
                     to: {
                         postal_code: postalCode
@@ -39,7 +47,7 @@ const CalculateShipping = async (postalCode) => {
         const data = await response.json();
         if (data[0].error) throw new Error(data[0].error)
 
-        return { data };
+        return { data, cepValidation };
     } catch (err) {
         return { error: err.message };
     }
