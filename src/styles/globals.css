@@ -12,7 +12,7 @@
 }
 
 body {
-  @apply min-h-screen overflow-x-hidden transition-all duration-300 bg-gradient-radial from-[--primary] to-blue-950 text-[--white] grid place-content-center
+  @apply min-h-screen overflow-x-hidden mx-6 sm:mx-0 transition-all duration-300 bg-gradient-radial from-[--primary] to-blue-950 text-[--white] grid place-content-center
 }
 
 h1{
