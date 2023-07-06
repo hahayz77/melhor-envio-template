@@ -41,7 +41,10 @@ export default function FirstForm() {
     }
 
     const selectHandler = (e) => {
-        if(e.target.value) console.log(JSON.parse(e.target.value))
+        if(e.target.value) {
+            console.log(JSON.parse(e.target.value))
+            
+        }
     }
 
     return (
