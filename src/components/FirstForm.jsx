@@ -1,6 +1,7 @@
 import { useStateContext } from '@/context/StateContext';
 import CalculateShipping from '@/functions/CalculateShipping';
 import { Alert, AlertIcon, AlertTitle, Select } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import InputMask from 'react-input-mask';
@@ -12,6 +13,7 @@ export default function FirstForm() {
     const [outsideError, setOutsideError] = useState("");
     const [response, setResponse] = useState(null);
     const [selectValue, setSelectValue] = useState(null);
+    const router = useRouter();
     // console.log(errors)
 
     const onSubmit = async data => {
@@ -27,6 +29,7 @@ export default function FirstForm() {
 
         const response = await CalculateShipping(data.zip_code);
         if (response.error) {
+            if (response.error.authCodeErr) return router.push('/api/authorize') //authorization code failed, redirect to the melhor envio api
             setLoading(false);
             setOutsideError(response.error);
         }
@@ -41,9 +44,9 @@ export default function FirstForm() {
     }
 
     const selectHandler = (e) => {
-        if(e.target.value) {
+        if (e.target.value) {
             console.log(JSON.parse(e.target.value))
-            
+
         }
     }
 

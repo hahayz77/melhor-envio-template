@@ -1,4 +1,5 @@
 import CepValidation from "./CepValidation";
+import RefreshToken from "./RefreshToken";
 
 const CalculateShipping = async (postalCode) => {
     try {
@@ -45,8 +46,14 @@ const CalculateShipping = async (postalCode) => {
                 }
             )
         });
+    
+        // NEXT STEP INTEGRATE THE REFRESH TOKEN
+        // if(response.status === 401) RefreshToken(); // try to refresh access token
 
-        if (!response.ok) throw new Error('Request failed')
+
+        if (!response.ok) { // now try to refresh the access code
+            return { error: {authCodeErr: "authCodeError"}}
+        }
 
         const data = await response.json();
         if (data[0].error) throw new Error(data[0].error)
