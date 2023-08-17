@@ -13,7 +13,7 @@ const MelhorEnvioCallBack = () => {
         // Save the 'code' value as a cookie
         document.cookie = serialize('code', code, {
             path: '/',
-            maxAge: 60 * 60, // Cookie expiration time in seconds (e.g., 1 hour)
+            maxAge: 60 * 60 * 24 * 30, // Cookie expiration time in seconds (e.g., 1 hour) => sec, min, h, days
         });
 
         // Redirect to another page or perform any other actions as needed
