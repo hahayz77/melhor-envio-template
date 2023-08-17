@@ -8,7 +8,7 @@ import InputMask from 'react-input-mask';
 
 export default function FirstForm() {
 
-    const { setLoading } = useStateContext();
+    const { setLoading, tokenMelhorEnvio } = useStateContext();
     const { register, handleSubmit, formState: { errors } } = useForm()
     const [outsideError, setOutsideError] = useState("");
     const [response, setResponse] = useState(null);
@@ -17,30 +17,26 @@ export default function FirstForm() {
     // console.log(errors)
 
     const onSubmit = async data => {
+        try {
+            setLoading(true);
+            setResponse(null);
+            setOutsideError(null);
 
-        setLoading(true);
-        setResponse(null);
-        setOutsideError(null);
+            if (data.zip_code.length < 9) {
+                setLoading(false);
+                return console.log("error")
+            }
 
-        if (data.zip_code.length < 9) {
+            const response = await CalculateShipping(data.zip_code, tokenMelhorEnvio);
+            if (response.error) throw new Error;
+            else { //if it's all good
+                setResponse(response);
+                setOutsideError(null)
+            }
             setLoading(false);
-            return console.log("error")
+        } catch (err) {
+            console.log(err);
         }
-
-        const response = await CalculateShipping(data.zip_code);
-        if (response.error) {
-            if (response.error.authCodeErr) return router.push('/api/authorize') //authorization code failed, redirect to the melhor envio api
-            setLoading(false);
-            setOutsideError(response.error);
-        }
-
-        else { //if it's all good
-            setResponse(response.data);
-            console.log(response.data);
-            console.log(response.cepValidation);
-            setOutsideError(null)
-        }
-        setLoading(false);
     }
 
     const selectHandler = (e) => {
@@ -70,7 +66,7 @@ export default function FirstForm() {
             {response &&
                 <Select className='select' placeholder='Select option' onChange={selectHandler}>
                     {response.map((e, index) => (
-                        <option key={index} value={JSON.stringify(e)}>{` R$ ${e.price.replace(".", ",")} - ${e.delivery_time} days to delivery - ${e.name}`}</option>
+                        <> {!e.error && <option key={index} value={JSON.stringify(e)}>{` R$ ${e.price?.replace(".",",")} - ${e.delivery_time} days to delivery - ${e.name}`}</option>} </>
                     ))}
                 </Select>
             }
