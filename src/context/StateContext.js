@@ -1,27 +1,25 @@
-import InitToken from "@/functions/InitToken";
 import { createContext, useContext, useEffect, useState } from "react";
 
 const Context = createContext();
 
-export const StateContext = ( { children } ) => {
-
+export const StateContext = ({ children }) => {
     const isAlive = "StateContext is alive!";
     const [loading, setLoading] = useState(true);
+    const [tokenMelhorEnvio, setTokenMelhorEnvio] = useState(null);
 
-    const tokenMelhorEnvio = InitToken();
-
-    useEffect(()=>{
-        setTimeout(()=>{
+    useEffect(() => {
+        setTimeout(() => {
             setLoading(false);
-        },2000)
-    },[])
+        }, 2000);
+    }, []);
 
-    return(
+    return (
         <Context.Provider value={{
             isAlive,
             loading, setLoading,
+            tokenMelhorEnvio, setTokenMelhorEnvio
         }}>
-        {children}
+            {children}
         </Context.Provider>
     )
 }
