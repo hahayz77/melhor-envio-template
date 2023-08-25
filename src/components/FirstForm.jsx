@@ -28,13 +28,17 @@ export default function FirstForm() {
             }
 
             const response = await CalculateShipping(data.zip_code, tokenMelhorEnvio);
-            if (response.error) throw new Error;
+            if (response.error) {
+                setOutsideError(response.error.length > 45 ? (`${response.error.slice(0, 45)}...`) : response.error);
+                throw new Error(response.error);
+            }
             else { //if it's all good
                 setResponse(response);
-                setOutsideError(null)
+                setOutsideError(null);
             }
             setLoading(false);
         } catch (err) {
+            setLoading(false);
             console.log(err);
         }
     }
@@ -66,7 +70,7 @@ export default function FirstForm() {
             {response &&
                 <Select className='select' placeholder='Select option' onChange={selectHandler}>
                     {response.map((e, index) => (
-                        <> {!e.error && <option key={index} value={JSON.stringify(e)}>{` R$ ${e.price?.replace(".",",")} - ${e.delivery_time} days to delivery - ${e.name}`}</option>} </>
+                        <> {!e.error && <option key={index} value={JSON.stringify(e)}>{` R$ ${e.price?.replace(".", ",")} - ${e.delivery_time} days to delivery - ${e.name}`}</option>} </>
                     ))}
                 </Select>
             }
