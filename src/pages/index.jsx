@@ -8,13 +8,14 @@ import { parse, serialize } from 'cookie';
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home({ accessToken }) {
+export default function Home() {
+// export default function Home({ accessToken }) {
 
-    const { tokenMelhorEnvio, setTokenMelhorEnvio } = useStateContext();
-    useEffect(() => {
+    // const { tokenMelhorEnvio, setTokenMelhorEnvio } = useStateContext();
+    // useEffect(() => {
 
-        setTokenMelhorEnvio(accessToken);
-    }, [])
+    //     setTokenMelhorEnvio(accessToken);
+    // }, [])
 
     return (
         <main>
@@ -26,22 +27,22 @@ export default function Home({ accessToken }) {
     )
 }
 
-export async function getServerSideProps(context) {
+// export async function getServerSideProps(context) {
 
-    // Check if there's a cookie in the request headers
-    const cookies = parse(context.req.headers.cookie || null); // Parse cookies from headers
-    let accessToken = cookies.accessToken;
+//     // Check if there's a cookie in the request headers
+//     const cookies = parse(context.req.headers.cookie || null); // Parse cookies from headers
+//     let accessToken = cookies.accessToken;
 
-    if (!accessToken) {
-        accessToken = await fetchToken();
+//     if (!accessToken) {
+//         accessToken = await fetchToken();
         
-        // Set the accessToken cookie
-        context.res.setHeader('Set-Cookie', serialize('accessToken', accessToken, {
-            maxAge: 60 * 60 * 24 * 30, // Cookie expiration in seconds (e.g., 1 hour)
-        }));
-    }
+//         // Set the accessToken cookie
+//         context.res.setHeader('Set-Cookie', serialize('accessToken', accessToken, {
+//             maxAge: 60 * 60 * 24 * 30, // Cookie expiration in seconds (e.g., 1 hour)
+//         }));
+//     }
 
-    return {
-        props: { accessToken }
-    }
-}
+//     return {
+//         props: { accessToken }
+//     }
+// }
