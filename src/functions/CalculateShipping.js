@@ -12,15 +12,19 @@ const CalculateShipping = async (postalCode, accessToken) => {
                 access_token: accessToken ? accessToken : null
             })
         });
-        
-        if (!response.ok) { // now try to refresh the access code
-            return { error: {authCodeErr: "authCodeError"}}
-        }
+
+        if (!response.ok) throw new Error(response.statusText)
 
         const data = await response.json();
-        if (data[0].error) throw new Error(data[0].error);
+        if (data[0]?.error || data.error) {
+            throw new Error(data[0]?.error || data.error);
+        }
+        if (data.access_token) {
+            return { data: data.data, access_token: data.access_token }
+        } else {
+            return data;
+        }
 
-        return data;
     } catch (err) {
         return { error: err.message };
     }
