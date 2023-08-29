@@ -1,20 +1,21 @@
 import { useStateContext } from '@/context/StateContext';
 import CalculateShipping from '@/functions/CalculateShipping';
+import fetchToken from '@/functions/FetchToken';
 import { Alert, AlertIcon, AlertTitle, Select } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import InputMask from 'react-input-mask';
+import Cookies from 'js-cookie';
 
 export default function FirstForm() {
 
-    const { setLoading, tokenMelhorEnvio } = useStateContext();
+    const { setLoading, tokenMelhorEnvio, setTokenMelhorEnvio } = useStateContext();
     const { register, handleSubmit, formState: { errors } } = useForm()
     const [outsideError, setOutsideError] = useState("");
     const [response, setResponse] = useState(null);
     const [selectValue, setSelectValue] = useState(null);
     const router = useRouter();
-    // console.log(errors)
 
     const onSubmit = async data => {
         try {
@@ -29,13 +30,16 @@ export default function FirstForm() {
 
             const response = await CalculateShipping(data.zip_code, tokenMelhorEnvio);
             if (response.error) {
-                setOutsideError(response.error.length > 45 ? (`${response.error.slice(0, 45)}...`) : response.error);
-                throw new Error(response.error);
+                setOutsideError(typeof response.error === "object" ? JSON.stringify(response.error) : response.error)
+                Cookies.remove('accessToken');
+                throw new Error(typeof response.error === "object" ? JSON.stringify(response.error) : response.error)
             }
-            else { //if it's all good
-                setResponse(response);
-                setOutsideError(null);
+            if (response.access_token) {
+                setTokenMelhorEnvio(response.access_token);
+                Cookies.set('accessToken', response.access_token, { expires: 30 });
             }
+            setOutsideError(null);
+            setResponse(response.data || response);
             setLoading(false);
         } catch (err) {
             setLoading(false);
@@ -46,7 +50,6 @@ export default function FirstForm() {
     const selectHandler = (e) => {
         if (e.target.value) {
             console.log(JSON.parse(e.target.value))
-
         }
     }
 
