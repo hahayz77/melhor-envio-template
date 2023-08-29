@@ -9,7 +9,7 @@ const fetchToken = async () => {
         const data = await response.json();
         return data.access_token;
     } catch (err) {
-
+        console.log(err)
     }
 }
 
